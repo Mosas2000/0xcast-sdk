@@ -1,0 +1,66 @@
+{
+  "name": "@0xcast/sdk",
+  "version": "0.1.0",
+  "description": "Official SDK for 0xCast - Decentralized Prediction Markets on Bitcoin",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "0xcast",
+    "prediction-markets",
+    "stacks",
+    "bitcoin",
+    "defi",
+    "sdk"
+  ],
+  "author": "0xCast Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mosas2000/0xcast-sdk.git"
+  },
+  "homepage": "https://0xcast.vercel.app",
+  "bugs": {
+    "url": "https://github.com/Mosas2000/0xcast-sdk/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "@stacks/connect": "^8.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@stacks/connect": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "eslint": "^8.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@stacks/network": "^7.0.0",
+    "@stacks/transactions": "^7.0.0"
+  }
+}
