@@ -1,15 +1,12 @@
 import type { 
   OrderParams, 
-  OrderResult,
   NetworkType 
 } from './types';
 import { HttpClient } from './http';
 import { CONTRACTS, STX, DEFAULTS, getNetworkConfig } from './constants';
 import { 
   InvalidParamsError, 
-  WalletNotConnectedError,
-  MarketClosedError,
-  InsufficientBalanceError 
+  WalletNotConnectedError
 } from './errors';
 
 /**
@@ -22,12 +19,10 @@ import {
 export class PositionsApi {
   private readonly http: HttpClient;
   private readonly contractAddress: string;
-  private readonly network: NetworkType;
   private walletAddress?: string;
 
   constructor(network: NetworkType, apiKey?: string, customUrl?: string) {
     this.http = new HttpClient(network, apiKey, customUrl);
-    this.network = network;
     this.contractAddress = getNetworkConfig(network).contractAddress;
   }
 

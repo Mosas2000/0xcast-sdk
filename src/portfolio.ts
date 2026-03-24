@@ -5,7 +5,6 @@ import type {
   Outcome
 } from './types';
 import { HttpClient } from './http';
-import { CONTRACTS, getNetworkConfig } from './constants';
 import { InvalidParamsError } from './errors';
 
 /**
@@ -39,11 +38,9 @@ interface RawPortfolioData {
  */
 export class PortfolioApi {
   private readonly http: HttpClient;
-  private readonly contractAddress: string;
 
   constructor(network: NetworkType, apiKey?: string, customUrl?: string) {
     this.http = new HttpClient(network, apiKey, customUrl);
-    this.contractAddress = getNetworkConfig(network).contractAddress;
   }
 
   /**
