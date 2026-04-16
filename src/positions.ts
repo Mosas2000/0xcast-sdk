@@ -21,9 +21,9 @@ export class PositionsApi {
   private readonly contractAddress: string;
   private walletAddress?: string;
 
-  constructor(network: NetworkType, apiKey?: string, customUrl?: string) {
+  constructor(network: NetworkType, apiKey?: string, customUrl?: string, contractAddress?: string) {
     this.http = new HttpClient(network, apiKey, customUrl);
-    this.contractAddress = getNetworkConfig(network).contractAddress;
+    this.contractAddress = contractAddress || getNetworkConfig(network).contractAddress;
   }
 
   /**
