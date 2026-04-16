@@ -1,8 +1,12 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, describe, it, expect, vi } from 'vitest';
 import { OxCast } from '../client';
 import { NETWORKS } from '../constants';
 
 describe('OxCast Client', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   describe('constructor', () => {
     it('should create client with default mainnet config', () => {
       const client = new OxCast();
@@ -78,6 +82,49 @@ describe('OxCast Client', () => {
       
       expect(url).toContain('explorer.stacks.co');
       expect(url).toContain(address);
+    });
+  });
+
+  describe('contract overrides', () => {
+    it('should honor a custom contract address across APIs', async () => {
+      const contractAddress = 'SP2OVERRIDEADDRESS0000000000000000000000000';
+      const client = new OxCast({
+        network: 'mainnet',
+        contractAddress,
+      });
+
+      client.connectWallet('SP2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKNRV9EJ7');
+
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue(
+          new Response(
+            JSON.stringify({
+              shares: '1000000',
+              price_per_share: 1,
+              total_cost: '1000000',
+              fees: '0',
+              price_impact: 0,
+            }),
+            {
+              status: 200,
+              headers: {
+                'content-type': 'application/json',
+              },
+            }
+          )
+        )
+      );
+
+      const tx = await client.positions.buildBuyTransaction({
+        marketId: 'market-1',
+        outcome: 'YES',
+        amount: 1_000_000n,
+      });
+
+      expect(client.getContractAddress()).toBe(contractAddress);
+      expect(tx.contractAddress).toBe(contractAddress);
+      expect(tx.functionName).toBe('buy-shares');
     });
   });
 });
