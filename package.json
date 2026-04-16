@@ -5,23 +5,29 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
-      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "vitest",
-    "lint": "eslint src --ext .ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:run": "vitest run",
+    "lint": "npm run typecheck",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build"
+    "check": "npm run lint && npm run test:run && npm run build",
+    "prepublishOnly": "npm run check"
   },
   "keywords": [
     "0xcast",
@@ -40,6 +46,9 @@
   "homepage": "https://0xcast.vercel.app",
   "bugs": {
     "url": "https://github.com/Mosas2000/0xcast-sdk/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=18"
