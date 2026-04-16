@@ -1,5 +1,12 @@
 import type { NetworkType } from './types';
 
+export interface NetworkConfig {
+  name: NetworkType;
+  apiUrl: string;
+  explorerUrl: string;
+  contractAddress: string;
+}
+
 /**
  * Network configuration constants
  */
@@ -60,6 +67,6 @@ export const STX = {
 /**
  * Get network configuration
  */
-export function getNetworkConfig(network: NetworkType) {
+export function getNetworkConfig(network: NetworkType): NetworkConfig {
   return NETWORKS[network];
 }
