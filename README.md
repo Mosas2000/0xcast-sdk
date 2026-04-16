@@ -39,6 +39,19 @@ const portfolio = await client.portfolio.get('SP...');
 
 Full documentation: [https://docs.0xcast.com](https://docs.0xcast.com)
 
+## Scripts
+
+This repository includes the following npm scripts:
+
+```bash
+npm run test         # Run the Vitest suite once
+npm run test:watch    # Run tests in watch mode
+npm run lint         # Run the type-check gate used by CI
+npm run typecheck    # Type-check without emitting files
+npm run build        # Produce the published dist bundle
+npm run check        # Run typecheck, tests, and build together
+```
+
 ## Requirements
 
 - Node.js >= 18
