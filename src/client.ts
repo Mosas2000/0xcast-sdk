@@ -41,6 +41,9 @@ export class OxCast {
   /** Current network */
   public readonly network: NetworkType;
 
+  /** Contract address in use */
+  public readonly contractAddress: string;
+
   /** Connected wallet address */
   private walletAddress?: string;
 
@@ -52,10 +55,11 @@ export class OxCast {
     
     const networkConfig = getNetworkConfig(this.network);
     const apiUrl = config.apiUrl || networkConfig.apiUrl;
+    this.contractAddress = config.contractAddress || networkConfig.contractAddress;
 
-    this.markets = new MarketsApi(this.network, config.apiKey, apiUrl);
+    this.markets = new MarketsApi(this.network, config.apiKey, apiUrl, this.contractAddress);
     this.portfolio = new PortfolioApi(this.network, config.apiKey, apiUrl);
-    this.positions = new PositionsApi(this.network, config.apiKey, apiUrl);
+    this.positions = new PositionsApi(this.network, config.apiKey, apiUrl, this.contractAddress);
   }
 
   /**
@@ -100,7 +104,7 @@ export class OxCast {
    * Get contract address
    */
   getContractAddress(): string {
-    return getNetworkConfig(this.network).contractAddress;
+    return this.contractAddress;
   }
 
   /**
