@@ -6,7 +6,7 @@ import type {
 } from './types';
 import { HttpClient } from './http';
 import { DEFAULTS, CONTRACTS, getNetworkConfig } from './constants';
-import { MarketNotFoundError, InvalidParamsError } from './errors';
+import { MarketNotFoundError, InvalidParamsError, OxCastError, ErrorCodes } from './errors';
 
 /**
  * Raw market data from API/contract
@@ -37,9 +37,9 @@ export class MarketsApi {
   private readonly http: HttpClient;
   private readonly contractAddress: string;
 
-  constructor(network: NetworkType, apiKey?: string, customUrl?: string) {
+  constructor(network: NetworkType, apiKey?: string, customUrl?: string, contractAddress?: string) {
     this.http = new HttpClient(network, apiKey, customUrl);
-    this.contractAddress = getNetworkConfig(network).contractAddress;
+    this.contractAddress = contractAddress || getNetworkConfig(network).contractAddress;
   }
 
   /**
@@ -88,7 +88,7 @@ export class MarketsApi {
       );
       return this.parseMarket(raw);
     } catch (error) {
-      if (error instanceof Error && error.message.includes('404')) {
+      if (error instanceof OxCastError && error.code === ErrorCodes.MARKET_NOT_FOUND) {
         throw new MarketNotFoundError(marketId);
       }
       throw error;
