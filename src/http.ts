@@ -43,7 +43,7 @@ export class HttpClient {
       const response = await fetch(url, {
         method: options.method || 'GET',
         headers,
-        body: options.body ? JSON.stringify(options.body) : undefined,
+        body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
         signal: controller.signal,
       });
 
@@ -53,7 +53,7 @@ export class HttpClient {
         await this.handleErrorResponse(response);
       }
 
-      return await response.json() as T;
+      return await this.parseResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
       
@@ -70,6 +70,27 @@ export class HttpClient {
       
       throw new NetworkError('Unknown network error');
     }
+  }
+
+  /**
+   * Parse a successful response body.
+   */
+  private async parseResponse<T>(response: Response): Promise<T> {
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
+    const contentLength = response.headers.get('content-length');
+    if (contentLength === '0') {
+      return undefined as T;
+    }
+
+    const raw = await response.text();
+    if (!raw) {
+      return undefined as T;
+    }
+
+    return JSON.parse(raw) as T;
   }
 
   /**
